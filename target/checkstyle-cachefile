@@ -1,0 +1,5 @@
+#Tue Mar 08 18:29:02 CET 2022
+configuration*?=1C031D05326AE495E06965397E4729205B734417
+module-resource*?\:checkstyle-xpath-suppressions.xml=341FC4DC6223EEA2C734AFE6CEE5177203A56D47
+module-resource*?\:checkstyle-suppressions.xml=F3015165933EE17F4481AEDB01CFE033CAFAC5C5
+/home/elin/Documents/M1/S8/JAVA/ccrpg-atek/src/main/java/fr/uvsq/hal/pglp/rpg/Ability.java=1646510428673

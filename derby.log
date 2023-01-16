@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Wed Mar 09 15:22:35 CET 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.2.0 - (1873585): instance a816c00e-017f-6f0f-6732-000006cb7210 
+on database directory memory:/home/elin/Documents/M1/S8/JAVA/ccrpg-atek/testdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@55054057 
+Loaded from file:/home/elin/.m2/repository/org/apache/derby/derby/10.15.2.0/derby-10.15.2.0.jar
+java.vendor=Ubuntu
+java.runtime.version=11.0.13+8-Ubuntu-0ubuntu1.20.04
+user.dir=/home/elin/Documents/M1/S8/JAVA/ccrpg-atek
+os.name=Linux
+os.arch=amd64
+os.version=5.4.0-100-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

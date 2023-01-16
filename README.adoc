@@ -1,0 +1,102 @@
+
+
+* Étudiant  : Mansoura Mohamed Amine , 21917483
+
+
+Le but de cet exercice est d'implémenter une bibliothèque de classes métier pour la gestion de personnages et d'équipes de jeu de rôle (JdR).
+
+NOTE: Les règles détaillées peuvent être trouvées sur le web en https://www.aidedd.org/regles/[français] et en https://dnd.wizards.com/articles/features/basicrules[anglais].
+
+Un personnage possède un nom ainsi que 6 *caractéristiques* : _Force_, _Dextérité_, _Constitution_, _Intelligence_, _Sagesse_ et _Charisme_.
+Chaque caractéristique est associée à une *valeur de caractéristique* comprise entre 2 et 20.
+Pour chaque *valeur de caractéristique*, un *modificateur de caractéristique* est généré et est égal à _-4_ pour une valeur de _2 ou 3_, _-3_ pour une valeur de _4 ou 5_, …, _0_ pour une valeur de _10 ou 11_, …, _+5_ pour une valeur de _20_.
+
+De plus, un personnage possède un certain nombre de *compétences* (_Acrobaties_, _Arcanes_, …) qui peuvent être différentes d'un personnage à l'autre et qui peuvent changer au cours du temps.
+Chaque compétence est associée à une caractéristique (_Acrobaties_ à _Dextérité_, _Arcanes_ à _Intelligence_, …).
+Lorsqu'un personnage maîtrise une compétence, il peut ajouter son *bonus de maîtrise* aux tests avec cette compétence.
+
+CAUTION: Pour chaque question, vous implémenterez les tests JUnit 4 (ou JUnit 5) appropriés.
+Aucun programme principal ne vous est demandé: seuls les tests démontreront le bon fonctionnement de vos implémentations.
+
+== Fiche de personnage
+. Définissez l'énumération `Ability` représentant les caractéristiques possibles (_Strength_, _Dexterity_, _Constitution_, _Intelligence_, _Wisdom_, _Charisma_).
+. Définissez l'énumération `Skill` représentant les compétences (_Acrobatics_, _Arcana_, …).
+. Définissez la classe `Character` représentant un personnage.
+Les instances de cette classe seront créées en respectant le pattern `Builder`.
+
+=== Instancier des personnages avec le pattern `Builder`
+Par défaut, le personnage doit avoir un nom et des valeurs de caractéristiques générées aléatoirement de la façon suivante.
+
+Chaque caractéristique est générée en tirant 4 valeurs aléatoires entre 1 et 6 dont on conservera la somme des 3 plus élevées.
+Par exemple, pour un tirage de _2, 3, 4, 5_, on obtiendra la valeur _12 = 5 + 4 + 3_.
+Comme cette méthode peut générer des personnages très déséquilibrés, le processus devra être répété tant que la somme des valeurs de caractéristique n'est pas comprise entre 60 et 80.
+
+. Implémentez le constructeur du _Builder_ en respectant le processus décrit ci-dessus.
+L'ordre de préférence sur les caractéristiques sera passé en paramètre du constructeur.
+Les valeurs seront attribuées de façon décroissante en respectant cet ordre.
+Par exemple, si la caractéristique _Force_ est préférée, elle recevra la plus forte valeur générée.
+. Ajouter la méthode `nonRandomAbilities` qui attribuera les valeurs _15, 14, 13, 12, 10, 8_ selon l'ordre de préférence en paramètre.
+. Ajouter une méthode `setAbilityScore` qui permettra d'attribuer une valeur spécifique à une caractéristique.
+. Ajouter une méthode `setProficiencyBonus` qui permettra de fixer le bonus de maîtrise du personnage.
+
+=== Compléter la classe `Character`
+. Définissez des accesseurs pour récupérer, pour chaque caractéristique, sa valeur (`getScore(Ability ability)`) ainsi que son modificateur (`getModifier(Ability ability)`).
+. Définissez la méthode (`abilityCheck`) effectuant un **jet de caractéristique**.
++
+Cette méthode prendra en paramètre une caractéristique et un degré de difficulté.
+L'opération consiste à tirer un nombre aléatoire entre 1 et 20 et à y ajouter le *modificateur de caractéristique*.
+Si le résultat est supérieur ou égal au degré de difficulté, la méthode doit retourner `true`.
+Si le résultat est inférieur au degré de difficulté, la méthode doit retourner `false`.
+. Définissez la méthode (`getSkillProficiency`) retournant le bonus pour une compétence donnée en paramètre.
++
+Ce bonus est égal à la somme du modificateur de caractéristique associé à la compétence et du bonus de maîtrise si la compétence est définie pour ce personnage.
+Si le personnage ne maîtrise pas la compétence, le bonus de compétence est simplement égal au modificateur de caractéristique associé à la compétence.
+. Définissez la méthode (`skillCheck`) effectuant un **jet de compétence**.
++
+Cette méthode prendra en paramètre une compétence et un degré de difficulté.
+L'opération consiste à tirer un nombre aléatoire entre 1 et 20 et à y ajouter la valeur du bonus de la compétence.
+Si le résultat est supérieur ou égal au degré de difficulté, la méthode doit retourner `true`.
+Si le résultat est inférieur au degré de difficulté, la méthode doit retourner `false`.
+
+== Équipe de personnages
+On veut pouvoir structurer les personnages en équipes qui peuvent elles-même faire partie d'autres équipes (hiérarchie).
+Vous utiliserez le pattern `Composite` pour cela.
+
+. Définissez la classe `Team` qui implémentera un groupe de personnages en utilisant le pattern `Composite`.
++
+CAUTION: vous prendrez garde à ne pas permettre la création de groupes se contenant eux-même même indirectement.
+. Définissez la méthode `getSize` qui déterminera (récursivement) le nombre de personnages dans un groupe.
+. Proposer une implémentation du pattern `Itérateur` qui permettra de parcourir l'ensemble des personnages d'une hiérarchie.
++
+IMPORTANT: l'implémentation devra respecter l'approche Java (`Iterable`/`Iterator`).
+
+== Rendre persistants les personnages
+La persistance sera assurée par JDBC.
+Vous utiliserez le SGBD `derby` en mode embarqué.
+
+. Quelles directives ajouter au POM pour intègrer JDBC et le SGBD au projet ?
++
+....
+    <!-- Embedded Derby Specific dependency-->
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>10.15.2.0</version>
+    </dependency>
+....
+. Définissez le modèle relationnel permettant de stocker les données des instances de la classe `Character`
++
+....
+Requêtes SQL de création des tables avec leurs attributs et leurs contraintes d'intégrité (clés, clés étrangères, …) :
+Nous avons décidé de lister les valeurs des caractéristiques d'un personnage dans sa ligne car celles-ci sont fixées. Les compétences quant à elles sont stockées dans une table distincte qui a une référence vers le personnage.
+....
+```sql
+CREATE TABLE characters(name VARCHAR(40) PRIMARY KEY,strength INT, dexterity INT, constitution INT, intelligence INT, wisdom INT, charisma INT, proficiencyBonus INT)
+CREATE TABLE skills(name VARCHAR(40) PRIMARY KEY, characterName VARCHAR(40) REFERENCES characters(name))
+```
+. Définissez l’interface DAO<T> pour les opérations CRUD.
+. Implémentez l’interface DAO<T> pour la classe `CharacterJdbcDao` avec JDBC.
+. Implémentez le pattern `Factory` (`JdbcDaoFactory`) pour l’instanciation des DAO.
+. En vue d'une généralisation à d'autres systèmes de persistance, mettez en œuvre le pattern `Abstract Factory` (`DaoAbstractFactory`) pour la création des fabriques de DAO.
+L'information permettant de déterminer quelle fabrique créer devra se trouver dans un fichier de configuration.
+On ne doit pas avoir à recompiler le programme pour passer à un autre système de persistance supporté.
